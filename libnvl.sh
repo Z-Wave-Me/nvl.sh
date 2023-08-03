@@ -118,7 +118,10 @@ nvl_rec_write_from_file()
 	fi
 
 	echo -n "$N="`wc -c "$V"`:
-	cat "$V"
+	if ! cat "$V"; then
+		NVL_ERRMSG="NVL: can't write a value from a file '$V'"
+		return 1
+	fi
 
 	return 0
 }

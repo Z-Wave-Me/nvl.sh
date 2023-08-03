@@ -21,7 +21,11 @@ nvl_header_read()
 
 	nvl_reset
 
-	read line
+	if ! read line; then
+		if [ -z "$line" ]; then
+			return 1
+		fi
+	fi
 	NVL_LINENO=$((NVL_LINENO + 1))
 	if [ $line = "NVL0" ]; then
 		return 0

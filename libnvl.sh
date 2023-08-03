@@ -27,7 +27,7 @@ nvl_header_read()
 		fi
 	fi
 	NVL_LINENO=$((NVL_LINENO + 1))
-	if [ $line = "NVL0" ]; then
+	if [ "$line" = "NVL0" ]; then
 		return 0
 	fi
 	NVL_ERRMSG="NVL: there is no nvl formatted data"

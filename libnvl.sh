@@ -5,13 +5,6 @@
 # Dependencies: wc
 #
 
-NVL_NAME=
-NVL_LEN=
-NVL_VAL=
-NVL_LINENO=1
-NVL_ERRMSG=
-
-
 nvl_reset()
 {
 	NVL_NAME=
@@ -20,6 +13,7 @@ nvl_reset()
 	NVL_LINENO=1
 	NVL_ERRMSG=
 }
+nvl_reset
 
 nvl_header_read()
 {

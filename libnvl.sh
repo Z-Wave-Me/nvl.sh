@@ -113,6 +113,22 @@ nvl_rec_write()
 	return 0
 }
 
+nvl_rec_write_from_file()
+{
+	local N=$1
+	local V=$2
+
+	if [ "${N#*=}" != $N ]; then
+		NVL_ERRMSG="NVL: name shouldn't contain '=': '$N'"
+		return 1
+	fi
+
+	echo -n "$N="`wc -c "$V"`:
+	cat "$V"
+
+	return 0
+}
+
 #
 # NVL CODE END
 #

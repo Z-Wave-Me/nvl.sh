@@ -1,3 +1,7 @@
+# Run me with:
+# cat test.data | ./nvl.sh
+#
+
 . libnvl.sh
 
 nvl_header_read

@@ -42,7 +42,7 @@ nvl_header_write()
 
 nvl_rec_read()
 {
-	local line state len total_len
+	local line state len total_len fname
 
 	state=0
 	NVL_NAME=
@@ -65,6 +65,11 @@ nvl_rec_read()
 			fi
 			NVL_VAL="${line#*:}"
 			if [ -z "$NVL_LEN" ]; then
+				fname=`_nvl_get_keyval "$NVL_NAME" "$@"`
+				if [ "$fname" ]; then
+					echo -n "$NVL_VAL" > "$fname"
+					NVL_VAL=""
+				fi
 				return 0
 			fi
 			if ! [ "$NVL_LEN" -ge 0 ]; then
@@ -84,6 +89,11 @@ $line"
 			len=`echo -n "$line" | wc -c`
 			total_len=$((total_len + len + 1))
 			if [ "$total_len" -eq "$NVL_LEN" ]; then
+				fname=`_nvl_get_keyval "$NVL_NAME" "$@"`
+				if [ "$fname" ]; then
+					echo -n "$NVL_VAL" > "$fname"
+					NVL_VAL=""
+				fi
 				return 0
 			fi
 			;;
@@ -94,6 +104,25 @@ $line"
 		NVL_ERRMSG="NVL: data is end before value is read(need $NVL_LEN, read $total_len)"
 	fi
 
+	return 1
+}
+
+_nvl_get_keyval()
+{
+	local kv key want
+
+	want="$1"
+	shift
+
+	for kv in "$@"; do
+		key="${kv%%=*}"
+		if [ "$key" = "$want" ] || [ "$key" = "*" ]; then
+			echo "${kv#*=}"
+			return 0
+		fi
+	done
+
+	echo ""
 	return 1
 }
 

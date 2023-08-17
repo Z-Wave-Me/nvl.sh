@@ -21,7 +21,7 @@ nvl_header_read()
 
 	nvl_reset
 
-	if ! read -r line; then
+	if ! IFS= read -r line; then
 		if [ -z "$line" ]; then
 			return 1
 		fi

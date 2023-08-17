@@ -1,7 +1,8 @@
 #
 # NVL CODE START
-# Version 1.0
-# ATTENTION: this script can't handle binary values due to bash limitations!
+# NVL version 0, lib version 1.0
+# NAME strict level 0 excluding \0 and newline
+# VAL strict level 0 excluding \0
 # Dependencies: wc
 #
 

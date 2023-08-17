@@ -1,0 +1,116 @@
+OVERVIEW
+========
+
+shell library for NVL parsing and formatting.
+
+
+SYNOPSIS
+========
+
+. LIBFILE
+nvl_reset
+nvl_header_read
+nvl_rec_read [NAME1=FILE_NAME1 [NAME2=FILE_NAME2 ...]]
+nvl_header_write
+nvl_rec_write NAME VALUE
+nvl_rec_write_from_file NAME FILE_NAME
+
+Where LIBFILE is  a needed libnvl version (See README.LIBFILE for additional
+info).
+
+
+DESCRIPTION
+===========
+
+libnvl uses global variables for work: NVL_NAME, NVL_LEN, NVL_VAL, NVL_LINENO,
+NVL_ERRMSG. NVL_NAME, NVL_LEN, NVL_VAL and NVL_LINENO are used when reading.
+NVL_ERRMSG is used when reading and writing.
+
+When LIBFILE is sourced by a shell these variables are set to their
+initial values. NVL_LINENO set to 1 and others variables are set to empty
+strings.
+
+nvl_reset is used to reset all nvl variables to their initial values.
+
+nvl_header_read is used to read a header of data from stdin and check it.
+This function must be called for new data at input before any nvl_rec_read
+calls. nvl_header_read calls nvl_reset by itself (thus, there is no need to
+call nvl_reset explicitly). NVL_LINENO is increased by 1. On error and end of
+file returns non zero return code.
+
+nvl_rec_read is used to read the next record from stdin. A name-to-file
+mapping can be specified in arguments. Where each argument is a one file name
+for a one value name. The syntax is: NAME=FILE_NAME. Where, NAME is a value
+name and FILE_NAME is a name of a file to which a value will be saved If a
+value name is equal to NAME. Otherwise, read value will be saved into NVL_VAL
+variable. The last entry in name-to-file mapping can be with NAME equal to "*".
+In this case all values for which a name-to-file mapping isn't exist before "*"
+are saved into specified file.
+NVL_LINENO is increased by newlines count. On error and end of file
+returns non zero return code.
+
+nvl_header_write is used to write NVL header to stdout.
+
+nvl_rec_write is used to write a specified name-value pair to stdout. On error
+returns non zero return code.
+
+nvl_rec_write_from_file is used to write a name-value pair to stdout, where
+a name is got from command line and a value is got from a file whose name is
+specified as second command line argument. On error returns non zero return
+code.
+
+
+RETURN VALUE
+============
+
+On error nvl_header_read, nvl_rec_read, nvl_rec_write and
+nvl_rec_write_from_file return non zero code and set NVL_ERRMSG variable to
+non empty string contained an error message.
+
+nvl_header_read and nvl_rec_read returns 1 also on end of file.
+NVL_ERRMSG in this case is empty string.
+
+
+ERRORS
+======
+
+SCRIPT-NAME: ./libnvl.bash: line 76: warning: command substitution: ignored null byte in input
+    A value read contained \0 char and it was saved in a variable instead of a
+    file (because file name for this value name isn't specified). Thus, \0
+    char is discarded from a value - i.e. value is corrupted.
+
+
+EXAMPLE
+=======
+
+~$ cat vals.data
+NVL0
+USER=:name
+PASS=:pass
+~$ cat test.sh
+. ./libnvl.sh
+nvl_reset
+exec <vals.data
+nvl_header_read
+if [ $? -ne 0 ]; then
+  [ "$NVL_ERRMSG" ] && { echo "bad header: $NVL_ERRMSG"; exit 1; }
+  exit 0
+fi
+
+while nvl_rec_read; do
+  echo "name = '$NVL_NAME'"
+  echo "value = '$NVL_VAL'"
+  echo
+done
+
+[ "$NVL_ERRMSG" ] && { echo "bad rec: $NVL_ERRMSG"; exit 1; }
+
+exit 0
+~$ ./test.sh
+name = 'USER'
+value = 'name'
+
+name = 'PASS'
+value = 'pass'
+
+~$

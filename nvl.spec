@@ -1,4 +1,4 @@
-2023.07.26
+2023.08.18
 
           Named-Values List, version 0
 
@@ -69,7 +69,7 @@ Recomendations
 
   NVL format doesn't impose any restrictions on NAME and VAL,
   besides that NAME mustn't include "=" char. Nevertheless it's better to
-  use only a printable subset of utf-8 characters for NAME, if you want to
+  use a printable subset of utf-8 characters for NAME, if you want to
   use shell NVL implementations to process your data.
 
   Every NVL implementation is recomended to specify what characters is
@@ -84,6 +84,11 @@ Recomendations
   * support VAL strict level 1 including newline
 
   See Appendix A for strict levels definitions.
+
+  Although NVL doesn't directly support arrays, they can be simulated with
+  multiple occurencies of the same name with different values. This approach
+  may be simplified a little by interpreting empty names as equal to a
+  previous one.
 
 Appendix A. ABNF of NVL
 

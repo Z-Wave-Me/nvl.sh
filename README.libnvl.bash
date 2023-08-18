@@ -6,3 +6,5 @@ but a next data read isn't broken.
 
 * support NAME strict level 0 excluding \0
 * support VAL strict level 0
+
+Dependencies: wc, dd.

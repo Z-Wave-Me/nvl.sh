@@ -10,3 +10,5 @@ at nvl_header_read call too.
 * support VAL strict level 0 excluding \0
 
 Shortly, use this implementation only for text-only data.
+
+Dependencies: wc.

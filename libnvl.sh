@@ -60,7 +60,7 @@ nvl_rec_read()
 			line="${line#*=}"
 			NVL_LEN=${line%%:*}
 			if [ "$NVL_LEN" = "$line" ]; then
-				NVL_ERRMSG="NVL: can't find length"
+				NVL_ERRMSG="NVL: $NVL_NAME: can't find length"
 				return 1
 			fi
 			NVL_VAL="${line#*:}"
@@ -73,7 +73,7 @@ nvl_rec_read()
 				return 0
 			fi
 			if ! [ "$NVL_LEN" -ge 0 ]; then
-				NVL_ERRMSG="NVL: length should be positive integer"
+				NVL_ERRMSG="NVL: $NVL_NAME: length should be positive integer"
 				return 1
 			fi
 			len=`echo -n "$NVL_VAL" | wc -c`

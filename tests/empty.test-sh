@@ -1,0 +1,12 @@
+. $LIBSRC
+. ./tests.utils
+
+nvl_reset
+exec <empty.data
+nvl_header_read
+[ $? -ne 0 ]
+err_exit $? "nvl_header_read must returns 1"
+[ "$NVL_ERRMSG" = "" ]
+err_exit $? "NVL_ERRMSG != ''($NVL_ERRMSG)"
+
+exit 0

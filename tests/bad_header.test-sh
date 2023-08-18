@@ -1,0 +1,12 @@
+. $LIBSRC
+. ./tests.utils
+
+nvl_reset
+exec <bad_header.data
+nvl_header_read
+[ $? -eq 1 ]
+err_exit $? "header check error"
+[ "$NVL_ERRMSG" = "NVL: there is no nvl formatted data" ]
+err_exit $? "error message is wrong: $NVL_ERRMSG"
+
+exit 0

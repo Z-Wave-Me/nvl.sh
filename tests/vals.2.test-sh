@@ -1,0 +1,34 @@
+. $LIBSRC
+. ./tests.utils
+
+nvl_reset
+exec <vals.2.data
+nvl_header_read
+err_exit $? "bad header: $NVL_ERRMSG"
+
+nvl_rec_read
+err_exit $? "bad rec: $NVL_ERRMSG"
+[ "$NVL_NAME" == "USER" ]
+err_exit $? "NVL_NAME != 'USER'('$NVL_NAME')"
+[ "$NVL_VAL" == "=name" ]
+err_exit $? "NVL_VAL != '=name'('$NVL_VAL')"
+
+nvl_rec_read
+err_exit $? "bad rec: $NVL_ERRMSG"
+[ "$NVL_NAME" == "PASS" ]
+err_exit $? "NVL_NAME != 'PASS'('$NVL_NAME')"
+[ "$NVL_VAL" == "pass=" ]
+err_exit $? "NVL_VAL != 'pass='('$NVL_VAL')"
+
+nvl_rec_read
+err_exit $? "bad rec: $NVL_ERRMSG"
+[ "$NVL_NAME" == "TXT" ]
+err_exit $? "NVL_NAME != 'TXT'('$NVL_NAME')"
+[ "$NVL_VAL" == "qq" ]
+err_exit $? "NVL_VAL != 'qq'('$NVL_VAL')"
+
+nvl_rec_read
+[ $? -eq 1 ]
+err_exit $? "end"
+
+exit 0

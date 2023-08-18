@@ -1,0 +1,17 @@
+. $LIBSRC
+. ./tests.utils
+
+nvl_reset
+exec <bad_len.data
+nvl_header_read
+err_exit $? "bad header: $NVL_ERRMSG"
+[ $NVL_LINENO -eq 2 ]
+err_exit $? "NVL_LINENO != 2 ($NVL_LINENO)"
+
+nvl_rec_read
+[ $? -eq 1 ]
+err_exit $? "length check error: $NVL_LEN"
+[ "$NVL_ERRMSG" = "NVL: USER: can't find length" ]
+err_exit $? "error message is wrong: '$NVL_ERRMSG'"
+
+exit 0

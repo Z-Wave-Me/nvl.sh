@@ -1,0 +1,19 @@
+COLOR_RED=`/bin/echo -e '\033[31;01m'`
+COLOR_RST=`/bin/echo -e '\033[00m'`
+
+
+err_exit()
+{
+	if [ $1 -eq 0 ]; then
+		return
+	fi
+	shift
+	err_out "$@"
+	exit 1
+}
+
+err_out()
+{
+	echo "${COLOR_RED}ERR:${COLOR_RST} $@" >&2
+}
+

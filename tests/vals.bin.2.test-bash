@@ -1,0 +1,58 @@
+. $LIBSRC
+. ./tests.utils
+
+nvl_reset
+exec <vals.bin.data
+nvl_header_read
+err_exit $? "bad header: $NVL_ERRMSG"
+[ $NVL_LINENO -eq 2 ]
+err_exit $? "NVL_LINENO != 2 ($NVL_LINENO)"
+
+rm -f VAL
+
+nvl_rec_read
+err_exit $? "bad rec: $NVL_ERRMSG"
+[ $NVL_LINENO -eq 3 ]
+err_exit $? "NVL_LINENO != 3 ($NVL_LINENO)"
+[ $NVL_NAME = "USER" ]
+err_exit $? "NVL_NAME != 'USER'('$NVL_NAME')"
+[ "$NVL_LEN" = "" ]
+err_exit $? "NVL_LEN != ''('$NVL_LEN')"
+[ $NVL_VAL = "name" ]
+err_exit $? "NVL_VAL != 'name'('$NVL_VAL')"
+[ ! -e VAL ]
+err_exit $? "file VAL mustn't exist"
+
+nvl_rec_read
+err_exit $? "bad rec: $NVL_ERRMSG"
+[ $NVL_LINENO -eq 5 ]
+err_exit $? "NVL_LINENO != 5 ($NVL_LINENO)"
+[ $NVL_NAME = "DATA" ]
+err_exit $? "NVL_NAME != 'DATA'('$NVL_NAME')"
+[ $NVL_LEN = "11" ]
+err_exit $? "NVL_LEN != '11'('$NVL_LEN')"
+REFVAL=`cat vals.bin.data-DATA; echo -n E`
+REFVAL=${REFVAL%E}
+[ "$NVL_VAL" = "$REFVAL" ]
+err_exit $? "NVL_VAL != read DATA"
+[ ! -e VAL ]
+err_exit $? "file VAL mustn't exist"
+
+nvl_rec_read DATA=VAL
+err_exit $? "bad rec: $NVL_ERRMSG"
+[ $NVL_LINENO -eq 6 ]
+err_exit $? "NVL_LINENO != 6 ($NVL_LINENO)"
+[ $NVL_NAME = "KEY1" ]
+err_exit $? "NVL_NAME != 'KEY1'('$NVL_NAME')"
+[ "$NVL_LEN" = "" ]
+err_exit $? "NVL_LEN != ''('$NVL_LEN')"
+[ "$NVL_VAL" = "val1" ]
+err_exit $? "NVL_VAL != 'val1'('$NVL_VAL')"
+[ ! -e VAL ]
+err_exit $? "file VAL mustn't exist"
+
+nvl_rec_read
+[ $? -eq 1 ]
+err_exit $? "end"
+
+exit 0
